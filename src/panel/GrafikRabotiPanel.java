@@ -21,4 +21,9 @@ public class GrafikRabotiPanel extends BasePanel {
     protected BaseDataBase createDataBase() throws SQLException {
         return new GrafikRabotiDataBase();
     }
+
+    @Override
+    protected String getSearchLabelTextSuffix() {
+        return "фио сотрудника";
+    }
 }

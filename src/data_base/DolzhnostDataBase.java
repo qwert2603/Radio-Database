@@ -13,8 +13,8 @@ public class DolzhnostDataBase extends BaseDataBase {
     private final PreparedStatement byNameAndOklad;
 
     public DolzhnostDataBase() throws SQLException {
-        byOklad = getConnection().prepareStatement(q + " WHERE (oklad > ?)");
-        byNameAndOklad = getConnection().prepareStatement(q + " WHERE (\"naimenovanie\" LIKE CONCAT('%', ?, '%')) AND (oklad > ?)");
+        byOklad = getConnection().prepareStatement(q + " WHERE (oklad >= ?)");
+        byNameAndOklad = getConnection().prepareStatement(q + " WHERE (\"naimenovanie\" LIKE CONCAT('%', ?, '%')) AND (oklad >= ?)");
     }
 
     @Override

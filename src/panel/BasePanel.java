@@ -3,11 +3,7 @@ package panel;
 import data_base.BaseDataBase;
 import table_model.BaseTableModel;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
@@ -18,6 +14,7 @@ public abstract class BasePanel extends JPanel {
     private BaseTableModel tableModel;
     private BaseDataBase dataBase;
 
+    private JLabel jNameSearchLabel;
     private JTable jTable;
     private JTextField jSearchTextField;
     private JButton jClearButton;
@@ -27,6 +24,8 @@ public abstract class BasePanel extends JPanel {
 
     protected abstract BaseDataBase createDataBase() throws SQLException;
 
+    protected abstract String getSearchLabelTextSuffix();
+
     public BasePanel() throws SQLException {
         tableModel = createTableModel();
         dataBase = createDataBase();
@@ -35,6 +34,10 @@ public abstract class BasePanel extends JPanel {
         tableModel.fromQuery(dataBase.queryAll());
 
         jTable = new JTable(tableModel);
+
+        jNameSearchLabel = new JLabel(String.format("Поиск по %s:", getSearchLabelTextSuffix()));
+        jNameSearchLabel.setBounds(280, 5, 200, 30);
+        add(jNameSearchLabel);
 
         jSearchTextField = new JTextField("");
         jSearchTextField.setBounds(280, 30, 200, 30);
@@ -94,5 +97,9 @@ public abstract class BasePanel extends JPanel {
 
     public JTextField getSearchTextField() {
         return jSearchTextField;
+    }
+
+    public JLabel getNameSearchLabel() {
+        return jNameSearchLabel;
     }
 }

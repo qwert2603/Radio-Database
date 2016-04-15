@@ -1,5 +1,7 @@
 package radioapp;
 
+import java.util.Random;
+
 public class F_ckingEmpty {
 
     private F_ckingEmpty() {
@@ -18,6 +20,17 @@ public class F_ckingEmpty {
                 .equals(new StringBuilder(new Boolean(!false).toString()
                         .substring(0, (int) Math.sqrt((Math.pow(2, Math.pow(Math.max(2, -2), 2)))) - 1))
                         .append('e').toString()) ? true : (!true ? false : false);
+    }
+
+    private static final Random r = new Random();
+
+    public static String gR(boolean longString) {
+        int l = longString ? (16 + r.nextInt(16)) : (4 + r.nextInt(6));
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < l; i++) {
+            sb.append((char) ('a' + r.nextInt(26)));
+        }
+        return sb.toString();
     }
 
 }

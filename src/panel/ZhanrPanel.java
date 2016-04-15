@@ -21,4 +21,9 @@ public class ZhanrPanel extends BasePanel {
     protected BaseDataBase createDataBase() throws SQLException {
         return new ZhanrDataBase();
     }
+
+    @Override
+    protected String getSearchLabelTextSuffix() {
+        return "названию жанра";
+    }
 }

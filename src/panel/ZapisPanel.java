@@ -5,17 +5,22 @@ import data_base.ZapisDataBase;
 import table_model.BaseTableModel;
 import table_model.ZapisTableModel;
 
-import javax.swing.JComboBox;
+import javax.swing.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ZapisPanel extends BasePanel {
 
+    private JLabel jIspolnitelFilterLabel;
     private JComboBox<String> jComboBox;
 
     public ZapisPanel() throws SQLException {
+        jIspolnitelFilterLabel = new JLabel("Фильтрация по испонителю:");
+        jIspolnitelFilterLabel.setBounds(10, 5, 200, 30);
+        add(jIspolnitelFilterLabel);
+
         jComboBox = new JComboBox<>();
-        jComboBox.setBounds(10, 30, 250, 30);
+        jComboBox.setBounds(10, 30, 200, 30);
         jComboBox.addItem("");
         ResultSet resultSet = ((ZapisDataBase) getDataBase()).queryDistinctIspolniteli();
         while (resultSet.next()) {
@@ -52,5 +57,10 @@ public class ZapisPanel extends BasePanel {
     protected void doClear() {
         jComboBox.setSelectedIndex(0);
         super.doClear();
+    }
+
+    @Override
+    protected String getSearchLabelTextSuffix() {
+        return "названию записи";
     }
 }

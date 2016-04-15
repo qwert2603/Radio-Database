@@ -13,11 +13,16 @@ import java.sql.SQLException;
 
 public class DolzhnostiPanel extends BasePanel {
 
+    private JLabel jOkladSearchLabel;
     private JTextField jOkladTextField;
 
     public DolzhnostiPanel() throws SQLException {
+        jOkladSearchLabel = new JLabel("Оклад не меньше:");
+        jOkladSearchLabel.setBounds(10, 5, 200, 30);
+        add(jOkladSearchLabel);
+
         jOkladTextField = new JTextField();
-        jOkladTextField.setBounds(10, 30, 250, 30);
+        jOkladTextField.setBounds(10, 30, 200, 30);
         jOkladTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
@@ -35,6 +40,11 @@ public class DolzhnostiPanel extends BasePanel {
     @Override
     protected BaseDataBase createDataBase() throws SQLException {
         return new DolzhnostDataBase();
+    }
+
+    @Override
+    protected String getSearchLabelTextSuffix() {
+        return "названию должности";
     }
 
     @Override

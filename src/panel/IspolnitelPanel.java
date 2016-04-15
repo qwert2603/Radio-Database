@@ -21,4 +21,9 @@ public class IspolnitelPanel extends BasePanel {
     protected BaseDataBase createDataBase() throws SQLException {
         return new IspolnitelDataBase();
     }
+
+    @Override
+    protected String getSearchLabelTextSuffix() {
+        return "названию исполнителя";
+    }
 }

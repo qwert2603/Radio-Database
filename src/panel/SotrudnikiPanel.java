@@ -21,4 +21,9 @@ public class SotrudnikiPanel extends BasePanel {
     protected BaseDataBase createDataBase() throws SQLException {
         return new SotrudnikDataBase();
     }
+
+    @Override
+    protected String getSearchLabelTextSuffix() {
+        return "фио сотрудника";
+    }
 }

@@ -8,10 +8,10 @@ import java.sql.SQLException;
 
 public class ZapisDataBase extends BaseDataBase {
 
-    private String q = "SELECT z.naimenovanie, i.naimenovanie, z.albom, z.god,"
+    private String q = "SELECT z.kod_zapisi, z.naimenovanie, i.naimenovanie, z.albom, z.god,"
             + " zh.naimenovanie, z.data_zapisi, z.dlitelnost, z.reiting "
             + " FROM \"DZH_zapisi\" z, \"DZH_ispolniteli\" i, \"DZH_zhanri\" zh"
-            + " WHERE (z.\"kod_ispilnitelya\" = i.\"kod_ispolnitelya\") AND (z.\"kod_zhanra\" = zh.\"kod_zhanra\")";
+            + " WHERE (z.\"kod_ispolnitelya\" = i.\"kod_ispolnitelya\") AND (z.\"kod_zhanra\" = zh.\"kod_zhanra\")";
 
     private final PreparedStatement distinctIspolniteli;
     private final PreparedStatement byIspolnitelStatement;
@@ -25,7 +25,7 @@ public class ZapisDataBase extends BaseDataBase {
         distinctIspolniteli = getConnection()
                 .prepareStatement("SELECT DISTINCT i.naimenovanie" +
                         " FROM \"DZH_zapisi\" z, \"DZH_ispolniteli\" i" +
-                        " WHERE (z.\"kod_ispilnitelya\" = i.\"kod_ispolnitelya\")"
+                        " WHERE (z.\"kod_ispolnitelya\" = i.\"kod_ispolnitelya\")"
                 );
     }
 
@@ -37,6 +37,11 @@ public class ZapisDataBase extends BaseDataBase {
     @Override
     protected PreparedStatement createSelectAllStatement() throws SQLException {
         return getConnection().prepareStatement(q);
+    }
+
+    @Override
+    protected PreparedStatement createDeleteStatement() throws SQLException {
+        return getConnection().prepareStatement("DELETE FROM \"DZH_zapisi\" WHERE (kod_zapisi = ?)");
     }
 
     public ResultSet queryByIspolnitel(String q) throws SQLException {

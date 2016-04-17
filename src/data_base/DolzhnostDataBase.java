@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DolzhnostDataBase extends BaseDataBase {
 
-    private String q = "SELECT naimenovanie, oklad, trebovaniya, obyazannosti"
+    private String q = "SELECT kod_dolzhnosti, naimenovanie, oklad, trebovaniya, obyazannosti"
             + " FROM \"DZH_dolzhnosti\"";
 
     private final PreparedStatement byOklad;
@@ -15,6 +15,18 @@ public class DolzhnostDataBase extends BaseDataBase {
     public DolzhnostDataBase() throws SQLException {
         byOklad = getConnection().prepareStatement(q + " WHERE (oklad >= ?)");
         byNameAndOklad = getConnection().prepareStatement(q + " WHERE (\"naimenovanie\" LIKE CONCAT('%', ?, '%')) AND (oklad >= ?)");
+
+
+        /*PreparedStatement preparedStatement = getConnection().prepareStatement(
+                "INSERT INTO \"DZH_dolzhnosti\" VALUES(?, ?, ?, ?, DEFAULT)"
+        );
+        for (int i = 0; i < 2305; i++) {
+            preparedStatement.setInt(1, 8 + r.nextInt(42));
+            preparedStatement.setString(2, gR(true));
+            preparedStatement.setString(3, gR(true));
+            preparedStatement.setString(4, gR(false));
+            preparedStatement.execute();
+        }*/
     }
 
     @Override
@@ -25,6 +37,11 @@ public class DolzhnostDataBase extends BaseDataBase {
     @Override
     protected PreparedStatement createSelectAllStatement() throws SQLException {
         return getConnection().prepareStatement(q);
+    }
+
+    @Override
+    protected PreparedStatement createDeleteStatement() throws SQLException {
+        return getConnection().prepareStatement("DELETE FROM \"DZH_dolzhnosti\" WHERE (kod_dolzhnosti = ?)");
     }
 
     public ResultSet queryByOklad(int oklad) throws SQLException {

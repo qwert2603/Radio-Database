@@ -26,4 +26,9 @@ public class GrafikRabotiPanel extends BasePanel {
     protected String getSearchLabelTextSuffix() {
         return "фио сотрудника";
     }
+
+    @Override
+    protected String getEntityName() {
+        return "график работы";
+    }
 }

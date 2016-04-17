@@ -1,6 +1,7 @@
 package panel;
 
 import data_base.BaseDataBase;
+import radioapp.RadioFrame;
 import table_model.BaseTableModel;
 
 import javax.swing.*;
@@ -19,12 +20,16 @@ public abstract class BasePanel extends JPanel {
     private JTextField jSearchTextField;
     private JButton jClearButton;
     private JScrollPane jScrollPane;
+    private JButton jDeleteButton;
+    private JTextField jDeletingIdTextField;
 
     protected abstract BaseTableModel createTableModel();
 
     protected abstract BaseDataBase createDataBase() throws SQLException;
 
     protected abstract String getSearchLabelTextSuffix();
+
+    protected abstract String getEntityName();
 
     public BasePanel() throws SQLException {
         tableModel = createTableModel();
@@ -57,9 +62,31 @@ public abstract class BasePanel extends JPanel {
         jScrollPane = new JScrollPane(jTable);
         jScrollPane.setBounds(10, 70, 750, 460);
         add(jScrollPane);
+
+        jDeleteButton = new JButton(String.format("Удалить %s с id = ", getEntityName()));
+        jDeleteButton.setBounds(10, 540, 220, 30);
+        jDeleteButton.setEnabled(false);
+        jDeleteButton.addActionListener(ev -> doDelete());
+        add(jDeleteButton);
+
+        jDeletingIdTextField = new JTextField();
+        jDeletingIdTextField.setBounds(250, 540, 200, 30);
+        jDeletingIdTextField.addKeyListener(new KeyAdapter() {
+            @SuppressWarnings("ResultOfMethodCallIgnored")
+            @Override
+            public void keyReleased(KeyEvent e) {
+                try {
+                    Integer.parseInt(jDeletingIdTextField.getText());
+                    jDeleteButton.setEnabled(true);
+                } catch (NumberFormatException e1) {
+                    jDeleteButton.setEnabled(false);
+                }
+            }
+        });
+        add(jDeletingIdTextField);
     }
 
-    protected void updateTable() {
+    public void updateTable() {
         try {
             String name = jSearchTextField.getText();
             ResultSet resultSet = dataBase.queryByName(name);
@@ -73,6 +100,15 @@ public abstract class BasePanel extends JPanel {
     protected void doClear() {
         jSearchTextField.setText("");
         updateTable();
+    }
+
+    private void doDelete() {
+        try {
+            getDataBase().deleteById(Integer.parseInt(jDeletingIdTextField.getText()));
+            RadioFrame.sRadioFrame.updateAllUI();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public BaseTableModel getTableModel() {

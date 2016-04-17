@@ -3,6 +3,7 @@ package table_model;
 public class GrafikRabotiTableModel extends BaseTableModel {
 
     public GrafikRabotiTableModel() {
+        colNames.add("id");
         colNames.add("Сотрудник");
         colNames.add("Запись1");
         colNames.add("Время1");

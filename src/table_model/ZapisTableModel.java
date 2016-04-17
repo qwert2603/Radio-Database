@@ -3,6 +3,7 @@ package table_model;
 public class ZapisTableModel extends BaseTableModel {
 
     public ZapisTableModel() {
+        colNames.add("id");
         colNames.add("Название");
         colNames.add("Исполнитель");
         colNames.add("Альбом");

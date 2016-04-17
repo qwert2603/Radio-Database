@@ -48,7 +48,12 @@ public class DolzhnostiPanel extends BasePanel {
     }
 
     @Override
-    protected void updateTable() {
+    protected String getEntityName() {
+        return "должность";
+    }
+
+    @Override
+    public void updateTable() {
         try {
             String name = getSearchTextField().getText();
             int oklad = getOkladInteger(jOkladTextField.getText());

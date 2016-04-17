@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 public class IspolnitelDataBase extends BaseDataBase {
 
-    private String q = "SELECT naimenovanie, opisanie " +
+    private String q = "SELECT kod_ispolnitelya, naimenovanie, opisanie " +
             " FROM \"DZH_ispolniteli\"";
 
     public IspolnitelDataBase() throws SQLException {}
@@ -18,6 +18,11 @@ public class IspolnitelDataBase extends BaseDataBase {
     @Override
     protected PreparedStatement createSelectAllStatement() throws SQLException {
        return getConnection().prepareStatement(q);
+    }
+
+    @Override
+    protected PreparedStatement createDeleteStatement() throws SQLException {
+        return getConnection().prepareStatement("DELETE FROM \"DZH_ispolniteli\" WHERE (kod_ispolnitelya = ?)");
     }
 
 }

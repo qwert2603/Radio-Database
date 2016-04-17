@@ -22,7 +22,7 @@ public class F_ckingEmpty {
                         .append('e').toString()) ? true : (!true ? false : false);
     }
 
-    private static final Random r = new Random();
+    public static final Random r = new Random();
 
     public static String gR(boolean longString) {
         int l = longString ? (16 + r.nextInt(16)) : (4 + r.nextInt(6));

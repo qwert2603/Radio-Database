@@ -26,4 +26,9 @@ public class ZhanrPanel extends BasePanel {
     protected String getSearchLabelTextSuffix() {
         return "названию жанра";
     }
+
+    @Override
+    protected String getEntityName() {
+        return "жанр";
+    }
 }

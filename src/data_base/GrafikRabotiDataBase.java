@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 public class GrafikRabotiDataBase extends BaseDataBase {
 
-    private String q = "SELECT s.fio, z.naimenovanie, g.vremya1, z.naimenovanie, g.vremya2, z.naimenovanie, g.vremya3 "
+    private String q = "SELECT g.kod_grafika, s.fio, z.naimenovanie, g.vremya1, z.naimenovanie, g.vremya2, z.naimenovanie, g.vremya3 "
             + " FROM \"DZH_grafik_raboty\" g, \"DZH_sotrudniki\" s, \"DZH_zapisi\" z"
             + " WHERE (g.kod_sotrudnika = s.kod_sotrudnika)"
             + " AND ((g.kod_zapisi1 = z.kod_zapisi)"
@@ -23,6 +23,11 @@ public class GrafikRabotiDataBase extends BaseDataBase {
     @Override
     protected PreparedStatement createSelectAllStatement() throws SQLException {
         return getConnection().prepareStatement(q);
+    }
+
+    @Override
+    protected PreparedStatement createDeleteStatement() throws SQLException {
+        return getConnection().prepareStatement("DELETE FROM \"DZH_grafik_raboty\" WHERE (kod_grafika = ?)");
     }
 
 }

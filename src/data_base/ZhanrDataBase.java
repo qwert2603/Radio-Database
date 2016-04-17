@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 public class ZhanrDataBase extends BaseDataBase {
 
-    private String q = "SELECT naimenovanie, opisanie "
+    private String q = "SELECT kod_zhanra, naimenovanie, opisanie "
             + " FROM \"DZH_zhanri\"";
 
     public ZhanrDataBase() throws SQLException {
@@ -29,4 +29,8 @@ public class ZhanrDataBase extends BaseDataBase {
         return getConnection().prepareStatement(q);
     }
 
+    @Override
+    protected PreparedStatement createDeleteStatement() throws SQLException {
+        return getConnection().prepareStatement("DELETE FROM \"DZH_zhanri\" WHERE (kod_zhanra = ?)");
+    }
 }

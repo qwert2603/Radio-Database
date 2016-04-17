@@ -41,7 +41,7 @@ public class ZapisPanel extends BasePanel {
     }
 
     @Override
-    protected void updateTable() {
+    public void updateTable() {
         try {
             String name = getSearchTextField().getText();
             String ispolnitel = jComboBox.getSelectedItem().toString();
@@ -62,5 +62,10 @@ public class ZapisPanel extends BasePanel {
     @Override
     protected String getSearchLabelTextSuffix() {
         return "названию записи";
+    }
+
+    @Override
+    protected String getEntityName() {
+        return "запись";
     }
 }

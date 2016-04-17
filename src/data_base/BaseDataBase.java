@@ -11,6 +11,7 @@ public abstract class BaseDataBase {
     private final Connection c;
     private PreparedStatement byNameStatement;
     private PreparedStatement allStatement;
+    private PreparedStatement deleteStatement;
 
     public BaseDataBase() throws SQLException {
         //c = DriverManager.getConnection("jdbc:postgresql://data.biysk.secna.ru:5432/test", "test", "Aigee9");
@@ -24,6 +25,8 @@ public abstract class BaseDataBase {
     protected abstract PreparedStatement createByNameStatement() throws SQLException;
 
     protected abstract PreparedStatement createSelectAllStatement() throws SQLException;
+
+    protected abstract PreparedStatement createDeleteStatement() throws SQLException;
 
     public ResultSet queryByName(String q) throws SQLException {
         if (q.isEmpty()) {
@@ -41,6 +44,14 @@ public abstract class BaseDataBase {
             allStatement = createSelectAllStatement();
         }
         return allStatement.executeQuery();
+    }
+
+    public void deleteById(int id) throws SQLException {
+        if (deleteStatement == null) {
+            deleteStatement = createDeleteStatement();
+        }
+        deleteStatement.setInt(1, id);
+        deleteStatement.execute();
     }
 
 }

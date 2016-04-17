@@ -26,4 +26,9 @@ public class SotrudnikiPanel extends BasePanel {
     protected String getSearchLabelTextSuffix() {
         return "фио сотрудника";
     }
+
+    @Override
+    protected String getEntityName() {
+        return "сотрудника";
+    }
 }

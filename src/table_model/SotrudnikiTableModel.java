@@ -3,6 +3,7 @@ package table_model;
 public class SotrudnikiTableModel extends BaseTableModel {
 
     public SotrudnikiTableModel() {
+        colNames.add("id");
         colNames.add("ФИО");
         colNames.add("Возраст");
         colNames.add("Пол");

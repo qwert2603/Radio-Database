@@ -26,4 +26,9 @@ public class IspolnitelPanel extends BasePanel {
     protected String getSearchLabelTextSuffix() {
         return "названию исполнителя";
     }
+
+    @Override
+    protected String getEntityName() {
+        return "исполнителя";
+    }
 }

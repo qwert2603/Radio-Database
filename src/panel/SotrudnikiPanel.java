@@ -2,6 +2,7 @@ package panel;
 
 import data_base.BaseDataBase;
 import data_base.SotrudnikDataBase;
+import radioapp.ComboBoxItem;
 import radioapp.RadioFrame;
 import table_model.BaseTableModel;
 import table_model.SotrudnikiTableModel;
@@ -15,7 +16,7 @@ import java.util.List;
 public class SotrudnikiPanel extends BasePanel {
 
     private JComboBox<String> jPolArgComboBox;
-    private JComboBox<DolzhnostItem> jDolzhnostArgComboBox;
+    private JComboBox<ComboBoxItem> jDolzhnostArgComboBox;
 
     public SotrudnikiPanel() throws SQLException {
         JTextField textField_6 = getArgsTextFields().get(6);
@@ -42,10 +43,10 @@ public class SotrudnikiPanel extends BasePanel {
 
     private void fillDolzhnostArgComboBoxItems() throws SQLException {
         jDolzhnostArgComboBox.removeAllItems();
-        jDolzhnostArgComboBox.addItem(new DolzhnostItem(-1, ""));
+        jDolzhnostArgComboBox.addItem(new ComboBoxItem(-1, ""));
         ResultSet resultSet = ((SotrudnikDataBase) getDataBase()).queryDistinctDolzhnosti();
         while (resultSet.next()) {
-            jDolzhnostArgComboBox.addItem(new DolzhnostItem(resultSet.getInt(1), resultSet.getString(2)));
+            jDolzhnostArgComboBox.addItem(new ComboBoxItem(resultSet.getInt(1), resultSet.getString(2)));
         }
     }
 
@@ -87,7 +88,7 @@ public class SotrudnikiPanel extends BasePanel {
                 args.add(jTextField.getText());
             }
             args.add(2, jPolArgComboBox.getSelectedItem().toString());
-            args.add(6, String.valueOf(((DolzhnostItem) jDolzhnostArgComboBox.getSelectedItem()).id));
+            args.add(6, String.valueOf(((ComboBoxItem) jDolzhnostArgComboBox.getSelectedItem()).id));
             getDataBase().insertNew(args);
             for (JTextField jTextField : getArgsTextFields()) {
                 jTextField.setText("");
@@ -97,21 +98,6 @@ public class SotrudnikiPanel extends BasePanel {
             RadioFrame.sRadioFrame.updateAllPanels();
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-    }
-
-    private static class DolzhnostItem {
-        public DolzhnostItem(int id, String s) {
-            this.s = s;
-            this.id = id;
-        }
-
-        String s;
-        int id;
-
-        @Override
-        public String toString() {
-            return s;
         }
     }
 }

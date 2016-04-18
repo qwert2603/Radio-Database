@@ -14,6 +14,7 @@ public class ZapisDataBase extends BaseDataBase {
             + " WHERE (z.\"kod_ispolnitelya\" = i.\"kod_ispolnitelya\") AND (z.\"kod_zhanra\" = zh.\"kod_zhanra\")";
 
     private final PreparedStatement distinctIspolniteli;
+    private final PreparedStatement distinctZhanri;
     private final PreparedStatement byIspolnitelStatement;
     private final PreparedStatement byNameAndIspolnitelStatement;
 
@@ -22,7 +23,8 @@ public class ZapisDataBase extends BaseDataBase {
         byNameAndIspolnitelStatement = getConnection().prepareStatement(q +
                 " AND (z.\"naimenovanie\" LIKE CONCAT('%', ?, '%'))" +
                 " AND (i.\"naimenovanie\" = ?)");
-        distinctIspolniteli = getConnection().prepareStatement("SELECT DISTINCT naimenovanie FROM \"DZH_ispolniteli\" i");
+        distinctIspolniteli = getConnection().prepareStatement("SELECT DISTINCT kod_ispolnitelya, naimenovanie FROM \"DZH_ispolniteli\" i");
+        distinctZhanri = getConnection().prepareStatement("SELECT DISTINCT kod_zhanra, naimenovanie FROM \"DZH_zhanri\" i");
     }
 
     @Override
@@ -38,6 +40,13 @@ public class ZapisDataBase extends BaseDataBase {
     @Override
     protected PreparedStatement createDeleteStatement() throws SQLException {
         return getConnection().prepareStatement("DELETE FROM \"DZH_zapisi\" WHERE (kod_zapisi = ?)");
+    }
+
+    @Override
+    protected PreparedStatement createInsertStatement() throws SQLException {
+        return getConnection().prepareStatement("INSERT INTO \"DZH_zapisi\"" +
+                " (kod_zapisi, naimenovanie, kod_ispolnitelya, albom, god, kod_zhanra, data_zapisi, dlitelnost, reiting)" +
+                " VALUES(DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?)");
     }
 
     public ResultSet queryByIspolnitel(String q) throws SQLException {
@@ -62,6 +71,10 @@ public class ZapisDataBase extends BaseDataBase {
 
     public ResultSet queryDistinctIspolniteli() throws SQLException {
         return distinctIspolniteli.executeQuery();
+    }
+
+    public ResultSet queryDistinctZhanri() throws SQLException {
+        return distinctZhanri.executeQuery();
     }
 
 }

@@ -8,7 +8,7 @@ public class F_ckingEmpty {
     }
 
     /**
-     * Autistic empty string. Only autists can use it.
+     * Really empty string.
      *
      * @param s та самая строка.
      * @return ну, тут все ясно.

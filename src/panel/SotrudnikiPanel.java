@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class SotrudnikiPanel extends BasePanel {
 
@@ -42,11 +43,16 @@ public class SotrudnikiPanel extends BasePanel {
     }
 
     private void fillDolzhnostArgComboBoxItems() throws SQLException {
+        Object selected = jDolzhnostArgComboBox.getSelectedItem();
         jDolzhnostArgComboBox.removeAllItems();
         jDolzhnostArgComboBox.addItem(new ComboBoxItem(-1, ""));
         ResultSet resultSet = ((SotrudnikDataBase) getDataBase()).queryDistinctDolzhnosti();
         while (resultSet.next()) {
-            jDolzhnostArgComboBox.addItem(new ComboBoxItem(resultSet.getInt(1), resultSet.getString(2)));
+            ComboBoxItem comboBoxItem = new ComboBoxItem(resultSet.getInt(1), resultSet.getString(2));
+            jDolzhnostArgComboBox.addItem(comboBoxItem);
+            if (Objects.equals(selected, comboBoxItem)) {
+                jDolzhnostArgComboBox.setSelectedItem(comboBoxItem);
+            }
         }
     }
 

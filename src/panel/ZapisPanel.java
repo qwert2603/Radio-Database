@@ -62,29 +62,40 @@ public class ZapisPanel extends BasePanel {
         jIspolnitelComboBox.addItem("");
         ResultSet resultSet = ((ZapisDataBase) getDataBase()).queryDistinctIspolniteli();
         while (resultSet.next()) {
-            jIspolnitelComboBox.addItem(resultSet.getString(2));
-            if (Objects.equals(selected, resultSet.getString(2))) {
-                jIspolnitelComboBox.setSelectedItem(resultSet.getString(2));
+            String string = resultSet.getString(2);
+            jIspolnitelComboBox.addItem(string);
+            if (Objects.equals(selected, string)) {
+                jIspolnitelComboBox.setSelectedItem(string);
             }
         }
         jIspolnitelComboBox.addActionListener(comboBoxActionListener);
     }
 
     private void fillIspolnitelArgComboBoxItems() throws SQLException {
+        Object selected = jIspolnitelArgComboBox.getSelectedItem();
         jIspolnitelArgComboBox.removeAllItems();
         jIspolnitelArgComboBox.addItem(new ComboBoxItem(-1, ""));
         ResultSet resultSet = ((ZapisDataBase) getDataBase()).queryDistinctIspolniteli();
         while (resultSet.next()) {
-            jIspolnitelArgComboBox.addItem(new ComboBoxItem(resultSet.getInt(1), resultSet.getString(2)));
+            ComboBoxItem comboBoxItem = new ComboBoxItem(resultSet.getInt(1), resultSet.getString(2));
+            jIspolnitelArgComboBox.addItem(comboBoxItem);
+            if (Objects.equals(selected, comboBoxItem)) {
+                jIspolnitelArgComboBox.setSelectedItem(comboBoxItem);
+            }
         }
     }
 
     private void fillZhanrArgComboBoxItems() throws SQLException {
+        Object selected = jZhanrArgComboBox.getSelectedItem();
         jZhanrArgComboBox.removeAllItems();
         jZhanrArgComboBox.addItem(new ComboBoxItem(-1, ""));
         ResultSet resultSet = ((ZapisDataBase) getDataBase()).queryDistinctZhanri();
         while (resultSet.next()) {
-            jZhanrArgComboBox.addItem(new ComboBoxItem(resultSet.getInt(1), resultSet.getString(2)));
+            ComboBoxItem comboBoxItem = new ComboBoxItem(resultSet.getInt(1), resultSet.getString(2));
+            jZhanrArgComboBox.addItem(comboBoxItem);
+            if (Objects.equals(selected, comboBoxItem)) {
+                jZhanrArgComboBox.setSelectedItem(comboBoxItem);
+            }
         }
     }
 

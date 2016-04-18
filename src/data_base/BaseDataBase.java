@@ -1,6 +1,9 @@
 package data_base;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public abstract class BaseDataBase {
@@ -26,9 +29,7 @@ public abstract class BaseDataBase {
 
     protected abstract PreparedStatement createDeleteStatement() throws SQLException;
 
-    protected PreparedStatement createInsertStatement() throws SQLException {
-        return null;
-    }
+    protected abstract PreparedStatement createInsertStatement() throws SQLException;
 
     public ResultSet queryByName(String q) throws SQLException {
         if (q.isEmpty()) {
@@ -61,14 +62,37 @@ public abstract class BaseDataBase {
             insertStatement = createInsertStatement();
         }
         for (int i = 0; i < args.size(); i++) {
-            if (args.get(i).isEmpty()) {
+            String s = args.get(i);
+            boolean done = false;
+            if (s.isEmpty()) {
                 insertStatement.setNull(i + 1, 0);
-            } else {
+                done = true;
+            }
+            if (!done) {
                 try {
-                    insertStatement.setInt(i + 1, Integer.parseInt(args.get(i)));
-                } catch (NumberFormatException e) {
-                    insertStatement.setString(i + 1, args.get(i));
+                    LocalTime date = LocalTime.parse(s, DateTimeFormatter.ISO_LOCAL_TIME);
+                    insertStatement.setTime(i + 1, Time.valueOf(date));
+                    done = true;
+                } catch (Exception ignored) {
                 }
+            }
+            if (!done) {
+                try {
+                    LocalDate date = LocalDate.parse(s, DateTimeFormatter.ISO_LOCAL_DATE);
+                    insertStatement.setDate(i + 1, Date.valueOf(date));
+                    done = true;
+                } catch (Exception ignored) {
+                }
+            }
+            if (!done) {
+                try {
+                    insertStatement.setInt(i + 1, Integer.parseInt(s));
+                    done = true;
+                } catch (NumberFormatException ignored) {
+                }
+            }
+            if (!done) {
+                insertStatement.setString(i + 1, s);
             }
         }
         insertStatement.execute();

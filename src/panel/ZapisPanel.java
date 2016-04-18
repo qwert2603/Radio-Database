@@ -28,7 +28,6 @@ public class ZapisPanel extends BasePanel {
         jIspolnitelFilterLabel = new JLabel("Фильтрация по испонителю:");
         jIspolnitelFilterLabel.setBounds(10, 5, 200, 30);
         add(jIspolnitelFilterLabel);
-
         jIspolnitelComboBox = new JComboBox<>();
         jIspolnitelComboBox.setBounds(10, 30, 200, 30);
         fillIspolnitelComboBoxItems();
@@ -38,7 +37,6 @@ public class ZapisPanel extends BasePanel {
         JTextField textField_4 = getArgsTextFields().get(4);
         remove(textField_4);
         getArgsTextFields().remove(4);
-
         jZhanrArgComboBox = new JComboBox<>();
         jZhanrArgComboBox.setBounds(textField_4.getBounds());
         fillZhanrArgComboBoxItems();
@@ -48,7 +46,6 @@ public class ZapisPanel extends BasePanel {
         JTextField textField_1 = getArgsTextFields().get(1);
         remove(textField_1);
         getArgsTextFields().remove(1);
-
         jIspolnitelArgComboBox = new JComboBox<>();
         jIspolnitelArgComboBox.setBounds(textField_1.getBounds());
         fillIspolnitelArgComboBoxItems();
@@ -124,7 +121,6 @@ public class ZapisPanel extends BasePanel {
 
     @Override
     public void updatePanel() {
-        super.updatePanel();
         try {
             fillIspolnitelComboBoxItems();
             fillIspolnitelArgComboBoxItems();
@@ -132,6 +128,7 @@ public class ZapisPanel extends BasePanel {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        super.updatePanel();
     }
 
     @Override

@@ -23,7 +23,6 @@ public class SotrudnikiPanel extends BasePanel {
         JTextField textField_6 = getArgsTextFields().get(6);
         remove(textField_6);
         getArgsTextFields().remove(6);
-
         jDolzhnostArgComboBox = new JComboBox<>();
         jDolzhnostArgComboBox.setBounds(textField_6.getBounds());
         fillDolzhnostArgComboBoxItems();
@@ -33,7 +32,6 @@ public class SotrudnikiPanel extends BasePanel {
         JTextField textField_2 = getArgsTextFields().get(2);
         remove(textField_2);
         getArgsTextFields().remove(2);
-
         jPolArgComboBox = new JComboBox<>();
         jPolArgComboBox.setBounds(textField_2.getBounds());
         jPolArgComboBox.addItem("");
@@ -78,12 +76,12 @@ public class SotrudnikiPanel extends BasePanel {
 
     @Override
     public void updatePanel() {
-        super.updatePanel();
         try {
             fillDolzhnostArgComboBoxItems();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        super.updatePanel();
     }
 
     @Override

@@ -9,6 +9,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BasePanel extends JPanel {
 
@@ -20,8 +22,12 @@ public abstract class BasePanel extends JPanel {
     private JTextField jSearchTextField;
     private JButton jClearButton;
     private JScrollPane jScrollPane;
+
     private JButton jDeleteButton;
     private JTextField jDeletingIdTextField;
+
+    private JButton jInsertButton;
+    private List<JTextField> jArgsTextFields = new ArrayList<>();
 
     protected abstract BaseTableModel createTableModel();
 
@@ -56,11 +62,11 @@ public abstract class BasePanel extends JPanel {
 
         jClearButton = new JButton("Очистить фильтр");
         jClearButton.setBounds(500, 30, 150, 30);
-        jClearButton.addActionListener(ev -> doClear());
+        jClearButton.addActionListener(ev -> doClearSearch());
         add(jClearButton);
 
         jScrollPane = new JScrollPane(jTable);
-        jScrollPane.setBounds(10, 70, 750, 460);
+        jScrollPane.setBounds(10, 70, 950, 460);
         add(jScrollPane);
 
         jDeleteButton = new JButton(String.format("Удалить %s с id = ", getEntityName()));
@@ -84,6 +90,21 @@ public abstract class BasePanel extends JPanel {
             }
         });
         add(jDeletingIdTextField);
+
+        int argsCount = tableModel.getColumnCount() - 1;
+        int widthOne = jScrollPane.getWidth() / (argsCount + 1);
+
+        jInsertButton = new JButton("Вставить");
+        jInsertButton.setBounds(10, 580, widthOne - 2, 30);
+        jInsertButton.addActionListener(ev -> doInsert());
+        add(jInsertButton);
+
+        for (int i = 0; i < argsCount; i++) {
+            JTextField jTextField = new JTextField();
+            jTextField.setBounds(10 + (i + 1) * widthOne, 580, widthOne - 2, 30);
+            add(jTextField);
+            jArgsTextFields.add(jTextField);
+        }
     }
 
     public void updateTable() {
@@ -97,7 +118,11 @@ public abstract class BasePanel extends JPanel {
         }
     }
 
-    protected void doClear() {
+    public void updatePanel() {
+        updateTable();
+    }
+
+    protected void doClearSearch() {
         jSearchTextField.setText("");
         updateTable();
     }
@@ -105,7 +130,25 @@ public abstract class BasePanel extends JPanel {
     private void doDelete() {
         try {
             getDataBase().deleteById(Integer.parseInt(jDeletingIdTextField.getText()));
-            RadioFrame.sRadioFrame.updateAllUI();
+            RadioFrame.sRadioFrame.updateAllPanels();
+            jDeletingIdTextField.setText("");
+            jDeleteButton.setEnabled(false);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void doInsert() {
+        try {
+            List<String> args = new ArrayList<>();
+            for (JTextField jTextField : jArgsTextFields) {
+                args.add(jTextField.getText());
+            }
+            dataBase.insertNew(args);
+            for (JTextField jTextField : jArgsTextFields) {
+                jTextField.setText("");
+            }
+            RadioFrame.sRadioFrame.updateAllPanels();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -123,19 +166,11 @@ public abstract class BasePanel extends JPanel {
         return jTable;
     }
 
-    public JScrollPane getScrollPane() {
-        return jScrollPane;
-    }
-
-    public JButton getClearButton() {
-        return jClearButton;
-    }
-
     public JTextField getSearchTextField() {
         return jSearchTextField;
     }
 
-    public JLabel getNameSearchLabel() {
-        return jNameSearchLabel;
+    public List<JTextField> getArgsTextFields() {
+        return jArgsTextFields;
     }
 }

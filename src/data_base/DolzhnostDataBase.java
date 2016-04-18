@@ -17,6 +17,8 @@ public class DolzhnostDataBase extends BaseDataBase {
         byNameAndOklad = getConnection().prepareStatement(q + " WHERE (\"naimenovanie\" LIKE CONCAT('%', ?, '%')) AND (oklad >= ?)");
 
 
+        //getConnection().prepareStatement("DELETE FROM \"DZH_dolzhnosti\"").execute();
+
         /*PreparedStatement preparedStatement = getConnection().prepareStatement(
                 "INSERT INTO \"DZH_dolzhnosti\" VALUES(?, ?, ?, ?, DEFAULT)"
         );
@@ -42,6 +44,12 @@ public class DolzhnostDataBase extends BaseDataBase {
     @Override
     protected PreparedStatement createDeleteStatement() throws SQLException {
         return getConnection().prepareStatement("DELETE FROM \"DZH_dolzhnosti\" WHERE (kod_dolzhnosti = ?)");
+    }
+
+    @Override
+    protected PreparedStatement createInsertStatement() throws SQLException {
+        return getConnection().prepareStatement("INSERT INTO \"DZH_dolzhnosti\"" +
+                " (kod_dolzhnosti, naimenovanie, oklad, trebovaniya, obyazannosti) VALUES(DEFAULT, ?, ?, ?, ?)");
     }
 
     public ResultSet queryByOklad(int oklad) throws SQLException {

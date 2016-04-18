@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public abstract class BaseTableModel extends AbstractTableModel {
 
     protected ArrayList<String> colNames;
-    protected ArrayList<ArrayList<String>> cells;
+    private ArrayList<ArrayList<String>> cells;
 
     public BaseTableModel() {
         colNames = new ArrayList<>();

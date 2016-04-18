@@ -66,9 +66,9 @@ public class DolzhnostiPanel extends BasePanel {
     }
 
     @Override
-    protected void doClear() {
+    protected void doClearSearch() {
         jOkladTextField.setText("");
-        super.doClear();
+        super.doClearSearch();
     }
 
     private int getOkladInteger(String okladString) {

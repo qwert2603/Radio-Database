@@ -25,4 +25,9 @@ public class IspolnitelDataBase extends BaseDataBase {
         return getConnection().prepareStatement("DELETE FROM \"DZH_ispolniteli\" WHERE (kod_ispolnitelya = ?)");
     }
 
+    @Override
+    protected PreparedStatement createInsertStatement() throws SQLException {
+        return getConnection().prepareStatement("INSERT INTO \"DZH_ispolniteli\" VALUES(DEFAULT, ?, ?)");
+    }
+
 }

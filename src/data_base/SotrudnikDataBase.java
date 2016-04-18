@@ -1,6 +1,7 @@
 package data_base;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SotrudnikDataBase extends BaseDataBase {
@@ -9,7 +10,11 @@ public class SotrudnikDataBase extends BaseDataBase {
             + " FROM \"DZH_sotrudniki\" s, \"DZH_dolzhnosti\" d"
             + " WHERE (s.kod_dolzhnosti = d.kod_dolzhnosti) ";
 
-    public SotrudnikDataBase() throws SQLException {}
+    private PreparedStatement distinctDolzhnosti;
+
+    public SotrudnikDataBase() throws SQLException {
+        distinctDolzhnosti = getConnection().prepareStatement("SELECT DISTINCT kod_dolzhnosti, naimenovanie FROM \"DZH_dolzhnosti\"");
+    }
 
     @Override
     protected PreparedStatement createByNameStatement() throws SQLException {
@@ -24,6 +29,17 @@ public class SotrudnikDataBase extends BaseDataBase {
     @Override
     protected PreparedStatement createDeleteStatement() throws SQLException {
         return getConnection().prepareStatement("DELETE FROM \"DZH_sotrudniki\" WHERE (kod_sotrudnika = ?)");
+    }
+
+    @Override
+    protected PreparedStatement createInsertStatement() throws SQLException {
+        return getConnection().prepareStatement("INSERT INTO \"DZH_sotrudniki\"" +
+                " (kod_sotrudnika, fio, vozrast, pol, adres, telefon, pasport, kod_dolzhnosti)" +
+                " VALUES(DEFAULT, ?, ?, ?, ?, ?, ?, ?)");
+    }
+
+    public ResultSet queryDistinctDolzhnosti() throws SQLException {
+        return distinctDolzhnosti.executeQuery();
     }
 
 }

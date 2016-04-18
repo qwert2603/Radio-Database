@@ -16,12 +16,12 @@ public class RadioFrame extends JFrame {
 
     public RadioFrame() throws HeadlessException, SQLException {
         super("Radio");
-        setBounds(100, 40, 800, 710);
+        setBounds(100, 40, 1000, 710);
         setLayout(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.setBounds(10, 10, 770, 650);
+        tabbedPane.setBounds(10, 10, 1070, 650);
 
         panelList.add(new ZapisPanel());
         panelList.add(new SotrudnikiPanel());
@@ -42,9 +42,9 @@ public class RadioFrame extends JFrame {
         sRadioFrame = RadioFrame.this;
     }
 
-    public void updateAllUI() {
+    public void updateAllPanels() {
         for (BasePanel basePanel : panelList) {
-            basePanel.updateTable();
+            basePanel.updatePanel();
         }
     }
 }

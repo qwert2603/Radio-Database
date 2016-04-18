@@ -22,11 +22,7 @@ public class ZapisDataBase extends BaseDataBase {
         byNameAndIspolnitelStatement = getConnection().prepareStatement(q +
                 " AND (z.\"naimenovanie\" LIKE CONCAT('%', ?, '%'))" +
                 " AND (i.\"naimenovanie\" = ?)");
-        distinctIspolniteli = getConnection()
-                .prepareStatement("SELECT DISTINCT i.naimenovanie" +
-                        " FROM \"DZH_zapisi\" z, \"DZH_ispolniteli\" i" +
-                        " WHERE (z.\"kod_ispolnitelya\" = i.\"kod_ispolnitelya\")"
-                );
+        distinctIspolniteli = getConnection().prepareStatement("SELECT DISTINCT naimenovanie FROM \"DZH_ispolniteli\" i");
     }
 
     @Override

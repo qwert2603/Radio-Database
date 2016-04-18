@@ -33,4 +33,9 @@ public class ZhanrDataBase extends BaseDataBase {
     protected PreparedStatement createDeleteStatement() throws SQLException {
         return getConnection().prepareStatement("DELETE FROM \"DZH_zhanri\" WHERE (kod_zhanra = ?)");
     }
+
+    @Override
+    protected PreparedStatement createInsertStatement() throws SQLException {
+        return getConnection().prepareStatement("INSERT INTO \"DZH_zhanri\" (kod_zhanra, naimenovanie, opisanie) VALUES(DEFAULT, ?, ?)");
+    }
 }

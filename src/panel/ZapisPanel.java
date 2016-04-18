@@ -6,6 +6,7 @@ import table_model.BaseTableModel;
 import table_model.ZapisTableModel;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -13,6 +14,7 @@ public class ZapisPanel extends BasePanel {
 
     private JLabel jIspolnitelFilterLabel;
     private JComboBox<String> jComboBox;
+    private ActionListener comboBoxActionListener = ev -> updateTable();
 
     public ZapisPanel() throws SQLException {
         jIspolnitelFilterLabel = new JLabel("Фильтрация по испонителю:");
@@ -21,13 +23,19 @@ public class ZapisPanel extends BasePanel {
 
         jComboBox = new JComboBox<>();
         jComboBox.setBounds(10, 30, 200, 30);
+        fillComboBoxItems();
+        add(jComboBox);
+    }
+
+    private void fillComboBoxItems() throws SQLException {
+        jComboBox.removeActionListener(comboBoxActionListener);
+        jComboBox.removeAllItems();
         jComboBox.addItem("");
         ResultSet resultSet = ((ZapisDataBase) getDataBase()).queryDistinctIspolniteli();
         while (resultSet.next()) {
             jComboBox.addItem(resultSet.getString(1));
         }
-        jComboBox.addActionListener(ev -> updateTable());
-        add(jComboBox);
+        jComboBox.addActionListener(comboBoxActionListener);
     }
 
     @Override
@@ -54,9 +62,19 @@ public class ZapisPanel extends BasePanel {
     }
 
     @Override
-    protected void doClear() {
+    public void updatePanel() {
+        super.updatePanel();
+        try {
+            fillComboBoxItems();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void doClearSearch() {
         jComboBox.setSelectedIndex(0);
-        super.doClear();
+        super.doClearSearch();
     }
 
     @Override

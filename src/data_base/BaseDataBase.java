@@ -1,10 +1,7 @@
 package data_base;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.List;
 
 public abstract class BaseDataBase {
 
@@ -12,6 +9,7 @@ public abstract class BaseDataBase {
     private PreparedStatement byNameStatement;
     private PreparedStatement allStatement;
     private PreparedStatement deleteStatement;
+    private PreparedStatement insertStatement;
 
     public BaseDataBase() throws SQLException {
         //c = DriverManager.getConnection("jdbc:postgresql://data.biysk.secna.ru:5432/test", "test", "Aigee9");
@@ -27,6 +25,10 @@ public abstract class BaseDataBase {
     protected abstract PreparedStatement createSelectAllStatement() throws SQLException;
 
     protected abstract PreparedStatement createDeleteStatement() throws SQLException;
+
+    protected PreparedStatement createInsertStatement() throws SQLException {
+        return null;
+    }
 
     public ResultSet queryByName(String q) throws SQLException {
         if (q.isEmpty()) {
@@ -52,6 +54,24 @@ public abstract class BaseDataBase {
         }
         deleteStatement.setInt(1, id);
         deleteStatement.execute();
+    }
+
+    public void insertNew(List<String> args) throws SQLException {
+        if (insertStatement == null) {
+            insertStatement = createInsertStatement();
+        }
+        for (int i = 0; i < args.size(); i++) {
+            if (args.get(i).isEmpty()) {
+                insertStatement.setNull(i + 1, 0);
+            } else {
+                try {
+                    insertStatement.setInt(i + 1, Integer.parseInt(args.get(i)));
+                } catch (NumberFormatException e) {
+                    insertStatement.setString(i + 1, args.get(i));
+                }
+            }
+        }
+        insertStatement.execute();
     }
 
 }

@@ -1,4 +1,4 @@
-package radioapp;
+package arg_component;
 
 public class ComboBoxItem {
     public ComboBoxItem(int id, String s) {

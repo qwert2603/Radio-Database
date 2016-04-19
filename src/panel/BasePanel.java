@@ -1,10 +1,13 @@
 package panel;
 
+import arg_component.ArgComponent;
+import arg_component.ArgTextField;
 import data_base.BaseDataBase;
 import radioapp.RadioFrame;
 import table_model.BaseTableModel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
@@ -27,7 +30,17 @@ public abstract class BasePanel extends JPanel {
     private JTextField jDeletingIdTextField;
 
     private JButton jInsertButton;
-    private List<JTextField> jArgsTextFields = new ArrayList<>();
+    private List<ArgComponent> jArgsComponentList = new ArrayList<ArgComponent>() {
+        @Override
+        public ArgComponent set(int index, ArgComponent element) {
+            Component oldComponent = (Component) get(index);
+            Component newComponent = (Component) element;
+            newComponent.setBounds(oldComponent.getBounds());
+            BasePanel.this.remove(oldComponent);
+            BasePanel.this.add(newComponent);
+            return super.set(index, element);
+        }
+    };
 
     protected abstract BaseTableModel createTableModel();
 
@@ -100,10 +113,10 @@ public abstract class BasePanel extends JPanel {
         add(jInsertButton);
 
         for (int i = 0; i < argsCount; i++) {
-            JTextField jTextField = new JTextField();
-            jTextField.setBounds(10 + (i + 1) * widthOne, 580, widthOne - 2, 30);
-            add(jTextField);
-            jArgsTextFields.add(jTextField);
+            ArgTextField argTextField = new ArgTextField();
+            argTextField.setBounds(10 + (i + 1) * widthOne, 580, widthOne - 2, 30);
+            add(argTextField);
+            jArgsComponentList.add(argTextField);
         }
     }
 
@@ -120,6 +133,13 @@ public abstract class BasePanel extends JPanel {
 
     public void updatePanel() {
         updateTable();
+        for (ArgComponent argComponent : jArgsComponentList) {
+            try {
+                argComponent.fill();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     protected void doClearSearch() {
@@ -141,12 +161,12 @@ public abstract class BasePanel extends JPanel {
     protected void doInsert() {
         try {
             List<String> args = new ArrayList<>();
-            for (JTextField jTextField : jArgsTextFields) {
-                args.add(jTextField.getText());
+            for (ArgComponent argComponent : jArgsComponentList) {
+                args.add(argComponent.getValue());
             }
             dataBase.insertNew(args);
-            for (JTextField jTextField : jArgsTextFields) {
-                jTextField.setText("");
+            for (ArgComponent argComponent : jArgsComponentList) {
+                argComponent.clear();
             }
             RadioFrame.sRadioFrame.updateAllPanels();
         } catch (SQLException e) {
@@ -170,7 +190,7 @@ public abstract class BasePanel extends JPanel {
         return jSearchTextField;
     }
 
-    public List<JTextField> getArgsTextFields() {
-        return jArgsTextFields;
+    public List<ArgComponent> getArgComponentList() {
+        return jArgsComponentList;
     }
 }

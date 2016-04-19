@@ -1,9 +1,8 @@
 package panel;
 
+import arg_component.ArgComboBox;
 import data_base.BaseDataBase;
 import data_base.ZapisDataBase;
-import radioapp.ComboBoxItem;
-import radioapp.RadioFrame;
 import table_model.BaseTableModel;
 import table_model.ZapisTableModel;
 
@@ -11,8 +10,6 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class ZapisPanel extends BasePanel {
@@ -20,9 +17,6 @@ public class ZapisPanel extends BasePanel {
     private JLabel jIspolnitelFilterLabel;
     private JComboBox<String> jIspolnitelComboBox;
     private ActionListener comboBoxActionListener = ev -> updateTable();
-
-    private JComboBox<ComboBoxItem> jIspolnitelArgComboBox;
-    private JComboBox<ComboBoxItem> jZhanrArgComboBox;
 
     public ZapisPanel() throws SQLException {
         jIspolnitelFilterLabel = new JLabel("Фильтрация по испонителю:");
@@ -33,23 +27,19 @@ public class ZapisPanel extends BasePanel {
         fillIspolnitelComboBoxItems();
         add(jIspolnitelComboBox);
 
+        getArgComponentList().set(4, new ArgComboBox() {
+            @Override
+            protected ResultSet createArgsSet() throws SQLException {
+                return ((ZapisDataBase) getDataBase()).queryDistinctZhanri();
+            }
+        });
 
-        JTextField textField_4 = getArgsTextFields().get(4);
-        remove(textField_4);
-        getArgsTextFields().remove(4);
-        jZhanrArgComboBox = new JComboBox<>();
-        jZhanrArgComboBox.setBounds(textField_4.getBounds());
-        fillZhanrArgComboBoxItems();
-        add(jZhanrArgComboBox);
-
-
-        JTextField textField_1 = getArgsTextFields().get(1);
-        remove(textField_1);
-        getArgsTextFields().remove(1);
-        jIspolnitelArgComboBox = new JComboBox<>();
-        jIspolnitelArgComboBox.setBounds(textField_1.getBounds());
-        fillIspolnitelArgComboBoxItems();
-        add(jIspolnitelArgComboBox);
+        getArgComponentList().set(1, new ArgComboBox() {
+            @Override
+            protected ResultSet createArgsSet() throws SQLException {
+                return ((ZapisDataBase) getDataBase()).queryDistinctIspolniteli();
+            }
+        });
     }
 
     private void fillIspolnitelComboBoxItems() throws SQLException {
@@ -66,34 +56,6 @@ public class ZapisPanel extends BasePanel {
             }
         }
         jIspolnitelComboBox.addActionListener(comboBoxActionListener);
-    }
-
-    private void fillIspolnitelArgComboBoxItems() throws SQLException {
-        Object selected = jIspolnitelArgComboBox.getSelectedItem();
-        jIspolnitelArgComboBox.removeAllItems();
-        jIspolnitelArgComboBox.addItem(new ComboBoxItem(-1, ""));
-        ResultSet resultSet = ((ZapisDataBase) getDataBase()).queryDistinctIspolniteli();
-        while (resultSet.next()) {
-            ComboBoxItem comboBoxItem = new ComboBoxItem(resultSet.getInt(1), resultSet.getString(2));
-            jIspolnitelArgComboBox.addItem(comboBoxItem);
-            if (Objects.equals(selected, comboBoxItem)) {
-                jIspolnitelArgComboBox.setSelectedItem(comboBoxItem);
-            }
-        }
-    }
-
-    private void fillZhanrArgComboBoxItems() throws SQLException {
-        Object selected = jZhanrArgComboBox.getSelectedItem();
-        jZhanrArgComboBox.removeAllItems();
-        jZhanrArgComboBox.addItem(new ComboBoxItem(-1, ""));
-        ResultSet resultSet = ((ZapisDataBase) getDataBase()).queryDistinctZhanri();
-        while (resultSet.next()) {
-            ComboBoxItem comboBoxItem = new ComboBoxItem(resultSet.getInt(1), resultSet.getString(2));
-            jZhanrArgComboBox.addItem(comboBoxItem);
-            if (Objects.equals(selected, comboBoxItem)) {
-                jZhanrArgComboBox.setSelectedItem(comboBoxItem);
-            }
-        }
     }
 
     @Override
@@ -123,8 +85,6 @@ public class ZapisPanel extends BasePanel {
     public void updatePanel() {
         try {
             fillIspolnitelComboBoxItems();
-            fillIspolnitelArgComboBoxItems();
-            fillZhanrArgComboBoxItems();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -145,26 +105,5 @@ public class ZapisPanel extends BasePanel {
     @Override
     protected String getEntityName() {
         return "запись";
-    }
-
-    @Override
-    protected void doInsert() {
-        try {
-            List<String> args = new ArrayList<>();
-            for (JTextField jTextField : getArgsTextFields()) {
-                args.add(jTextField.getText());
-            }
-            args.add(1, String.valueOf(((ComboBoxItem) jIspolnitelArgComboBox.getSelectedItem()).id));
-            args.add(4, String.valueOf(((ComboBoxItem) jZhanrArgComboBox.getSelectedItem()).id));
-            getDataBase().insertNew(args);
-            for (JTextField jTextField : getArgsTextFields()) {
-                jTextField.setText("");
-            }
-            jIspolnitelArgComboBox.setSelectedIndex(0);
-            jZhanrArgComboBox.setSelectedIndex(0);
-            RadioFrame.sRadioFrame.updateAllPanels();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }

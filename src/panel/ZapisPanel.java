@@ -1,6 +1,7 @@
 package panel;
 
-import arg_component.ArgComboBox;
+import arg_component.ResultSetComboBox;
+import arg_component.StringComboBox;
 import data_base.BaseDataBase;
 import data_base.ZapisDataBase;
 import table_model.BaseTableModel;
@@ -10,6 +11,8 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class ZapisPanel extends BasePanel {
@@ -27,17 +30,28 @@ public class ZapisPanel extends BasePanel {
         fillIspolnitelComboBoxItems();
         add(jIspolnitelComboBox);
 
-        getArgComponentList().set(4, new ArgComboBox() {
+        getArgComponentList().set(4, new ResultSetComboBox() {
             @Override
-            protected ResultSet createArgsSet() throws SQLException {
+            protected ResultSet createResultSet() throws SQLException {
                 return ((ZapisDataBase) getDataBase()).queryDistinctZhanri();
             }
         });
 
-        getArgComponentList().set(1, new ArgComboBox() {
+        getArgComponentList().set(1, new ResultSetComboBox() {
             @Override
-            protected ResultSet createArgsSet() throws SQLException {
+            protected ResultSet createResultSet() throws SQLException {
                 return ((ZapisDataBase) getDataBase()).queryDistinctIspolniteli();
+            }
+        });
+
+        getArgComponentList().set(7, new StringComboBox() {
+            @Override
+            protected List<String> createStringList() {
+                List<String> stringList = new ArrayList<>();
+                for (int i = 0; i <= 10; i++) {
+                    stringList.add(String.valueOf(i));
+                }
+                return stringList;
             }
         });
     }

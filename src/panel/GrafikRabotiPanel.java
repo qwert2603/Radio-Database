@@ -1,6 +1,6 @@
 package panel;
 
-import arg_component.ArgComboBox;
+import arg_component.ResultSetComboBox;
 import data_base.BaseDataBase;
 import data_base.GrafikRabotiDataBase;
 import table_model.BaseTableModel;
@@ -16,9 +16,9 @@ public class GrafikRabotiPanel extends BasePanel {
         getArgComponentList().set(3, new ZapisiComboBox());
         getArgComponentList().set(1, new ZapisiComboBox());
 
-        getArgComponentList().set(0, new ArgComboBox() {
+        getArgComponentList().set(0, new ResultSetComboBox() {
             @Override
-            protected ResultSet createArgsSet() throws SQLException {
+            protected ResultSet createResultSet() throws SQLException {
                 return ((GrafikRabotiDataBase) getDataBase()).queryDistinctSotrudniki();
             }
         });
@@ -44,12 +44,12 @@ public class GrafikRabotiPanel extends BasePanel {
         return "график работы";
     }
 
-    private class ZapisiComboBox extends ArgComboBox {
+    private class ZapisiComboBox extends ResultSetComboBox {
         public ZapisiComboBox() throws SQLException {
         }
 
         @Override
-        protected ResultSet createArgsSet() throws SQLException {
+        protected ResultSet createResultSet() throws SQLException {
             return ((GrafikRabotiDataBase) getDataBase()).queryDistinctZapisi();
         }
     }

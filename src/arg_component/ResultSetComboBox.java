@@ -5,20 +5,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
 
-public abstract class ArgComboBox extends JComboBox<ComboBoxItem> implements ArgComponent {
+public abstract class ResultSetComboBox extends JComboBox<ComboBoxItem> implements ArgComponent {
 
-    public ArgComboBox() throws SQLException {
+    public ResultSetComboBox() throws SQLException {
         fill();
     }
 
-    protected abstract ResultSet createArgsSet() throws SQLException;
+    protected abstract ResultSet createResultSet() throws SQLException;
 
     @Override
     public void fill() throws SQLException {
         Object selected = getSelectedItem();
         removeAllItems();
         addItem(new ComboBoxItem(-1, ""));
-        ResultSet resultSet = createArgsSet();
+        ResultSet resultSet = createResultSet();
         while (resultSet.next()) {
             ComboBoxItem comboBoxItem = new ComboBoxItem(resultSet.getInt(1), resultSet.getString(2));
             addItem(comboBoxItem);

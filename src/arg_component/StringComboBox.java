@@ -2,21 +2,24 @@ package arg_component;
 
 import javax.swing.*;
 import java.sql.SQLException;
+import java.util.List;
 
+public abstract class StringComboBox extends JComboBox<String> implements ArgComponent {
 
-public class PolComboBox extends JComboBox<String> implements ArgComponent {
-
-    public PolComboBox() throws SQLException {
+    public StringComboBox() throws SQLException {
         fill();
     }
+
+    protected abstract List<String> createStringList();
 
     @Override
     public void fill() throws SQLException {
         Object selected = getSelectedItem();
         removeAllItems();
         addItem("");
-        addItem("m");
-        addItem("f");
+        for (String s : createStringList()) {
+            addItem(s);
+        }
         setSelectedItem(selected);
     }
 

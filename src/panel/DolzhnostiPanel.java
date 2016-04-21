@@ -71,11 +71,10 @@ public class DolzhnostiPanel extends BasePanel {
         super.doClearSearch();
     }
 
-    private int getOkladInteger(String okladString) {
+    private static int getOkladInteger(String okladString) {
         try {
             return Integer.parseInt(okladString);
-        } catch (NumberFormatException e) {
-            //e.printStackTrace();
+        } catch (NumberFormatException ignored) {
         }
         return 0;
     }

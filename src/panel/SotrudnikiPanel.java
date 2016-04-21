@@ -42,7 +42,7 @@ public class SotrudnikiPanel extends BasePanel {
 
     @Override
     protected String getSearchLabelTextSuffix() {
-        return "фио сотрудника";
+        return "должности";
     }
 
     @Override

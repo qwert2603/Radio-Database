@@ -21,7 +21,7 @@ public class ZapisDataBase extends BaseDataBase {
     public ZapisDataBase() throws SQLException {
         byIspolnitelStatement = getConnection().prepareStatement(q + " AND (i.\"naimenovanie\" = ?)");
         byNameAndIspolnitelStatement = getConnection().prepareStatement(q +
-                " AND (z.\"naimenovanie\" LIKE CONCAT('%', ?, '%'))" +
+                " AND (zh.\"naimenovanie\" LIKE CONCAT('%', ?, '%'))" +
                 " AND (i.\"naimenovanie\" = ?)");
         distinctIspolniteli = getConnection().prepareStatement("SELECT DISTINCT kod_ispolnitelya, naimenovanie FROM \"DZH_ispolniteli\" i");
         distinctZhanri = getConnection().prepareStatement("SELECT DISTINCT kod_zhanra, naimenovanie FROM \"DZH_zhanri\" i");
@@ -29,7 +29,7 @@ public class ZapisDataBase extends BaseDataBase {
 
     @Override
     protected PreparedStatement createByNameStatement() throws SQLException {
-        return getConnection().prepareStatement(q + " AND (z.\"naimenovanie\" LIKE CONCAT('%', ?, '%'))");
+        return getConnection().prepareStatement(q + " AND (zh.\"naimenovanie\" LIKE CONCAT('%', ?, '%'))");
     }
 
     @Override

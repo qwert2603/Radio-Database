@@ -18,7 +18,7 @@ public class SotrudnikDataBase extends BaseDataBase {
 
     @Override
     protected PreparedStatement createByNameStatement() throws SQLException {
-        return getConnection().prepareStatement(q + " AND (s.fio LIKE CONCAT('%', ?, '%'))");
+        return getConnection().prepareStatement(q + " AND (d.naimenovanie LIKE CONCAT('%', ?, '%'))");
     }
 
     @Override

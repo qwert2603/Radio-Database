@@ -59,8 +59,8 @@ public abstract class BasePanel extends JPanel {
 
         jTable = new JTable(tableModel);
 
-        jNameSearchLabel = new JLabel(String.format("Поиск по %s:", getSearchLabelTextSuffix()));
-        jNameSearchLabel.setBounds(280, 5, 200, 30);
+        jNameSearchLabel = new JLabel(String.format("Фильтрация по %s:", getSearchLabelTextSuffix()));
+        jNameSearchLabel.setBounds(280, 5, 400, 30);
         add(jNameSearchLabel);
 
         jSearchTextField = new JTextField("");

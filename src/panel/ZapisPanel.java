@@ -113,7 +113,7 @@ public class ZapisPanel extends BasePanel {
 
     @Override
     protected String getSearchLabelTextSuffix() {
-        return "названию записи";
+        return "названию жанра";
     }
 
     @Override

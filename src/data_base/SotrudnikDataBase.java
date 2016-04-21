@@ -7,8 +7,7 @@ import java.sql.SQLException;
 public class SotrudnikDataBase extends BaseDataBase {
 
     private String q = "SELECT s.kod_sotrudnika, s.fio, s.vozrast, s.pol, s.adres, s.telefon, s.pasport, d.naimenovanie"
-            + " FROM \"DZH_sotrudniki\" s, \"DZH_dolzhnosti\" d"
-            + " WHERE (s.kod_dolzhnosti = d.kod_dolzhnosti) ";
+            + " FROM \"DZH_sotrudniki\" s LEFT JOIN \"DZH_dolzhnosti\" d ON s.kod_dolzhnosti = d.kod_dolzhnosti";
 
     private PreparedStatement distinctDolzhnosti;
 
@@ -18,12 +17,12 @@ public class SotrudnikDataBase extends BaseDataBase {
 
     @Override
     protected PreparedStatement createByNameStatement() throws SQLException {
-        return getConnection().prepareStatement(q + " AND (d.naimenovanie LIKE CONCAT('%', ?, '%'))");
+        return getConnection().prepareStatement(q + " WHERE (d.naimenovanie LIKE CONCAT('%', ?, '%'))");
     }
 
     @Override
     protected PreparedStatement createSelectAllStatement() throws SQLException {
-       return getConnection().prepareStatement(q);
+        return getConnection().prepareStatement(q);
     }
 
     @Override

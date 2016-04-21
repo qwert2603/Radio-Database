@@ -8,12 +8,15 @@ import java.time.LocalDate;
 
 public class GrafikRabotiDataBase extends BaseDataBase {
 
-    private String q = "SELECT g.kod_grafika, s.fio, g.data, z.naimenovanie, g.vremya1, z.naimenovanie, g.vremya2, z.naimenovanie, g.vremya3 "
-            + " FROM \"DZH_grafik_raboty\" g, \"DZH_sotrudniki\" s, \"DZH_zapisi\" z"
-            + " WHERE (g.kod_sotrudnika = s.kod_sotrudnika)"
-            + " AND ((g.kod_zapisi1 = z.kod_zapisi)"
-            + " OR (g.kod_zapisi2 = z.kod_zapisi)"
-            + " OR (g.kod_zapisi3 = z.kod_zapisi))";
+    private String q = "SELECT g.kod_grafika, s.fio, g.data," +
+            " z1.naimenovanie, g.vremya1," +
+            " z2.naimenovanie, g.vremya2," +
+            " z3.naimenovanie, g.vremya3 " +
+            " FROM \"DZH_grafik_raboty\" g" +
+            " LEFT JOIN \"DZH_sotrudniki\" s ON g.kod_sotrudnika = s.kod_sotrudnika" +
+            " LEFT JOIN \"DZH_zapisi\" z1 ON g.kod_zapisi1 = z1.kod_zapisi" +
+            " LEFT JOIN \"DZH_zapisi\" z2 ON g.kod_zapisi2 = z2.kod_zapisi" +
+            " LEFT JOIN \"DZH_zapisi\" z3 ON g.kod_zapisi3 = z3.kod_zapisi";
 
     private PreparedStatement distinctZapisi;
     private PreparedStatement distinctSotrudniki;
@@ -23,13 +26,13 @@ public class GrafikRabotiDataBase extends BaseDataBase {
     public GrafikRabotiDataBase() throws SQLException {
         distinctZapisi = getConnection().prepareStatement("SELECT DISTINCT kod_zapisi, naimenovanie FROM \"DZH_zapisi\"");
         distinctSotrudniki = getConnection().prepareStatement("SELECT DISTINCT kod_sotrudnika, fio FROM \"DZH_sotrudniki\"");
-        byData = getConnection().prepareStatement(q + "AND (g.data = ?)");
-        byNameAndData = getConnection().prepareStatement(q + "AND (s.fio LIKE CONCAT('%', ?, '%')) AND (g.data = ?)");
+        byData = getConnection().prepareStatement(q + " WHERE (g.data = ?)");
+        byNameAndData = getConnection().prepareStatement(q + " WHERE (s.fio LIKE CONCAT('%', ?, '%')) AND (g.data = ?)");
     }
 
     @Override
     protected PreparedStatement createByNameStatement() throws SQLException {
-        return getConnection().prepareStatement(q + " AND (s.fio LIKE CONCAT('%', ?, '%'))");
+        return getConnection().prepareStatement(q + " WHERE (s.fio LIKE CONCAT('%', ?, '%'))");
     }
 
     @Override

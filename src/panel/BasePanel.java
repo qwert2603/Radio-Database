@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class BasePanel extends JPanel {
 
@@ -29,7 +30,8 @@ public abstract class BasePanel extends JPanel {
     private JButton jDeleteButton;
     private JTextField jDeletingIdTextField;
 
-    private JButton jInsertButton;
+    private JButton jInsertUpdateButton;
+    private JTextField jIdTextField;
     private List<ArgComponent> jArgsComponentList = new ArrayList<ArgComponent>() {
         @Override
         public ArgComponent set(int index, ArgComponent element) {
@@ -107,10 +109,41 @@ public abstract class BasePanel extends JPanel {
         int argsCount = tableModel.getColumnCount() - 1;
         int widthOne = jScrollPane.getWidth() / (argsCount + 1);
 
-        jInsertButton = new JButton("Вставить");
-        jInsertButton.setBounds(10, 580, widthOne - 2, 30);
-        jInsertButton.addActionListener(ev -> doInsert());
-        add(jInsertButton);
+        jInsertUpdateButton = new JButton("I");
+        jInsertUpdateButton.setBounds(10, 580, (widthOne - 2) / 2, 30);
+        jInsertUpdateButton.addActionListener(ev -> {
+            if (Objects.equals(jInsertUpdateButton.getText(), "I")) {
+                doInsert();
+            } else {
+                doUpdate();
+            }
+        });
+        add(jInsertUpdateButton);
+
+        jIdTextField = new JTextField();
+        jIdTextField.setBounds(10 + widthOne / 2, 580, (widthOne - 2) / 2, 30);
+        jIdTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                try {
+                    int id = Integer.parseInt(jIdTextField.getText());
+                    List<String> argsForRecordById = getFieldsForRecordById(id);
+                    if (argsForRecordById == null) {
+                        jInsertUpdateButton.setText("I");
+                        clearArgsFields();
+                        return;
+                    }
+                    for (int i = 0; i < argsForRecordById.size() - 1; i++) {
+                        jArgsComponentList.get(i).setValue(argsForRecordById.get(i + 1));
+                    }
+                    jInsertUpdateButton.setText("U");
+                } catch (NumberFormatException e1) {
+                    jInsertUpdateButton.setText("I");
+                    clearArgsFields();
+                }
+            }
+        });
+        add(jIdTextField);
 
         for (int i = 0; i < argsCount; i++) {
             ArgTextField argTextField = new ArgTextField();
@@ -118,6 +151,22 @@ public abstract class BasePanel extends JPanel {
             add(argTextField);
             jArgsComponentList.add(argTextField);
         }
+    }
+
+    private List<String> getFieldsForRecordById(int id) {
+        try {
+            ResultSet resultSet = dataBase.queryById(id);
+            if (resultSet.next()) {
+                List<String> strings = new ArrayList<>();
+                for (int i = 0; i < tableModel.getColumnCount(); i++) {
+                    strings.add(resultSet.getString(i + 1));
+                }
+                return strings;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void updateTable() {
@@ -160,18 +209,39 @@ public abstract class BasePanel extends JPanel {
 
     private void doInsert() {
         try {
-            List<String> args = new ArrayList<>();
-            for (ArgComponent argComponent : jArgsComponentList) {
-                args.add(argComponent.getValue());
-            }
-            dataBase.insertNew(args);
-            for (ArgComponent argComponent : jArgsComponentList) {
-                argComponent.clear();
-            }
+            dataBase.insertNew(getArgs());
+            clearArgsFields();
             RadioFrame.sRadioFrame.updateAllPanels();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(BasePanel.this, e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    private void doUpdate() {
+        try {
+            dataBase.updateBuId(Integer.parseInt(jIdTextField.getText()), getArgs());
+            clearArgsFields();
+            RadioFrame.sRadioFrame.updateAllPanels();
+            jIdTextField.setText("");
+            jInsertUpdateButton.setText("I");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(BasePanel.this, e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private List<String> getArgs() {
+        List<String> args = new ArrayList<>();
+        for (ArgComponent argComponent : jArgsComponentList) {
+            args.add(argComponent.getValue());
+        }
+        return args;
+    }
+
+    private void clearArgsFields() {
+        for (ArgComponent argComponent : jArgsComponentList) {
+            argComponent.clear();
         }
     }
 

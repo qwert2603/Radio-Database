@@ -32,6 +32,11 @@ public class DolzhnostDataBase extends BaseDataBase {
     }
 
     @Override
+    protected PreparedStatement createByIdStatement() throws SQLException {
+        return getConnection().prepareStatement(q + " WHERE (kod_dolzhnosti = ?)");
+    }
+
+    @Override
     protected PreparedStatement createByNameStatement() throws SQLException {
         return getConnection().prepareStatement(q + " WHERE (\"naimenovanie\" LIKE CONCAT('%', ?, '%'))");
     }
@@ -50,6 +55,13 @@ public class DolzhnostDataBase extends BaseDataBase {
     protected PreparedStatement createInsertStatement() throws SQLException {
         return getConnection().prepareStatement("INSERT INTO \"DZH_dolzhnosti\"" +
                 " (kod_dolzhnosti, naimenovanie, oklad, trebovaniya, obyazannosti) VALUES(DEFAULT, ?, ?, ?, ?)");
+    }
+
+    @Override
+    protected PreparedStatement createUpdateStatement() throws SQLException {
+        return getConnection().prepareStatement("UPDATE \"DZH_dolzhnosti\"" +
+                " SET naimenovanie = ?, oklad = ?, trebovaniya = ?, obyazannosti = ?" +
+                " WHERE (kod_dolzhnosti = ?)");
     }
 
     public ResultSet queryByOklad(int oklad) throws SQLException {

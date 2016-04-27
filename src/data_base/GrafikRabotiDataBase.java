@@ -31,6 +31,11 @@ public class GrafikRabotiDataBase extends BaseDataBase {
     }
 
     @Override
+    protected PreparedStatement createByIdStatement() throws SQLException {
+        return getConnection().prepareStatement(q + " WHERE (kod_grafika = ?)");
+    }
+
+    @Override
     protected PreparedStatement createByNameStatement() throws SQLException {
         return getConnection().prepareStatement(q + " WHERE (s.fio LIKE CONCAT('%', ?, '%'))");
     }
@@ -50,6 +55,13 @@ public class GrafikRabotiDataBase extends BaseDataBase {
         return getConnection().prepareStatement("INSERT INTO \"DZH_grafik_raboty\"" +
                 " (kod_grafika, kod_sotrudnika, data, kod_zapisi1, vremya1, kod_zapisi2, vremya2, kod_zapisi3, vremya3)" +
                 " VALUES(DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?)");
+    }
+
+    @Override
+    protected PreparedStatement createUpdateStatement() throws SQLException {
+        return getConnection().prepareStatement("UPDATE \"DZH_grafik_raboty\"" +
+                " SET kod_sotrudnika = ?, data = ?, kod_zapisi1 = ?, vremya1 = ?, kod_zapisi2 = ?, vremya2 = ?, kod_zapisi3 = ?, vremya3 = ?" +
+                " WHERE (kod_grafika = ?)");
     }
 
     public ResultSet queryDistinctZapisi() throws SQLException {

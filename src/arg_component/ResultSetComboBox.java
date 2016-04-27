@@ -37,4 +37,15 @@ public abstract class ResultSetComboBox extends JComboBox<ComboBoxItem> implemen
     public String getValue() {
         return String.valueOf(((ComboBoxItem) getSelectedItem()).id);
     }
+
+    @Override
+    public void setValue(String s) {
+        for (int i = 0; i < getItemCount(); i++) {
+            ComboBoxItem itemAt = getItemAt(i);
+            if (itemAt.s.equals(s)) {
+                setSelectedItem(itemAt);
+                break;
+            }
+        }
+    }
 }

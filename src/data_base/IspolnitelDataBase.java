@@ -11,6 +11,11 @@ public class IspolnitelDataBase extends BaseDataBase {
     public IspolnitelDataBase() throws SQLException {}
 
     @Override
+    protected PreparedStatement createByIdStatement() throws SQLException {
+        return getConnection().prepareStatement(q + " WHERE (kod_ispolnitelya = ?)");
+    }
+
+    @Override
     protected PreparedStatement createByNameStatement() throws SQLException {
         return getConnection().prepareStatement(q + " WHERE (\"naimenovanie\" LIKE CONCAT('%', ?, '%'))");
     }
@@ -28,6 +33,13 @@ public class IspolnitelDataBase extends BaseDataBase {
     @Override
     protected PreparedStatement createInsertStatement() throws SQLException {
         return getConnection().prepareStatement("INSERT INTO \"DZH_ispolniteli\" VALUES(DEFAULT, ?, ?)");
+    }
+
+    @Override
+    protected PreparedStatement createUpdateStatement() throws SQLException {
+        return getConnection().prepareStatement("UPDATE \"DZH_ispolniteli\"" +
+                " SET naimenovanie = ?, opisanie = ?" +
+                " WHERE (kod_ispolnitelya = ?)");
     }
 
 }

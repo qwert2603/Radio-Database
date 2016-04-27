@@ -28,6 +28,11 @@ public class ZapisDataBase extends BaseDataBase {
     }
 
     @Override
+    protected PreparedStatement createByIdStatement() throws SQLException {
+        return getConnection().prepareStatement(q + " AND (kod_zapisi = ?)");
+    }
+
+    @Override
     protected PreparedStatement createByNameStatement() throws SQLException {
         return getConnection().prepareStatement(q + " AND (zh.\"naimenovanie\" LIKE CONCAT('%', ?, '%'))");
     }
@@ -47,6 +52,13 @@ public class ZapisDataBase extends BaseDataBase {
         return getConnection().prepareStatement("INSERT INTO \"DZH_zapisi\"" +
                 " (kod_zapisi, naimenovanie, kod_ispolnitelya, albom, god, kod_zhanra, data_zapisi, dlitelnost, reiting)" +
                 " VALUES(DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?)");
+    }
+
+    @Override
+    protected PreparedStatement createUpdateStatement() throws SQLException {
+        return getConnection().prepareStatement("UPDATE \"DZH_zapisi\"" +
+                " SET naimenovanie = ?, kod_ispolnitelya = ?, albom = ?, god = ?, kod_zhanra = ?, data_zapisi = ?, dlitelnost = ?, reiting = ?" +
+                " WHERE (kod_zapisi = ?)");
     }
 
     public ResultSet queryByIspolnitel(String q) throws SQLException {

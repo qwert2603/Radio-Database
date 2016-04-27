@@ -16,6 +16,11 @@ public class SotrudnikDataBase extends BaseDataBase {
     }
 
     @Override
+    protected PreparedStatement createByIdStatement() throws SQLException {
+        return getConnection().prepareStatement(q + " WHERE (kod_sotrudnika = ?)");
+    }
+
+    @Override
     protected PreparedStatement createByNameStatement() throws SQLException {
         return getConnection().prepareStatement(q + " WHERE (d.naimenovanie LIKE CONCAT('%', ?, '%'))");
     }
@@ -35,6 +40,13 @@ public class SotrudnikDataBase extends BaseDataBase {
         return getConnection().prepareStatement("INSERT INTO \"DZH_sotrudniki\"" +
                 " (kod_sotrudnika, fio, vozrast, pol, adres, telefon, pasport, kod_dolzhnosti)" +
                 " VALUES(DEFAULT, ?, ?, ?, ?, ?, ?, ?)");
+    }
+
+    @Override
+    protected PreparedStatement createUpdateStatement() throws SQLException {
+        return getConnection().prepareStatement("UPDATE \"DZH_sotrudniki\"" +
+                " SET fio = ?, vozrast = ?, pol = ?, adres = ?, telefon = ?, pasport = ?, kod_dolzhnosti = ?" +
+                " WHERE (kod_sotrudnika = ?)");
     }
 
     public ResultSet queryDistinctDolzhnosti() throws SQLException {

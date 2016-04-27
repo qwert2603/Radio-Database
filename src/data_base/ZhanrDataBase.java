@@ -20,6 +20,11 @@ public class ZhanrDataBase extends BaseDataBase {
     }
 
     @Override
+    protected PreparedStatement createByIdStatement() throws SQLException {
+        return getConnection().prepareStatement(q + " WHERE (kod_zhanra = ?)");
+    }
+
+    @Override
     protected PreparedStatement createByNameStatement() throws SQLException {
         return getConnection().prepareStatement(q + " WHERE (\"naimenovanie\" LIKE CONCAT('%', ?, '%'))");
     }
@@ -37,5 +42,10 @@ public class ZhanrDataBase extends BaseDataBase {
     @Override
     protected PreparedStatement createInsertStatement() throws SQLException {
         return getConnection().prepareStatement("INSERT INTO \"DZH_zhanri\" (kod_zhanra, naimenovanie, opisanie) VALUES(DEFAULT, ?, ?)");
+    }
+
+    @Override
+    protected PreparedStatement createUpdateStatement() throws SQLException {
+        return getConnection().prepareStatement("UPDATE \"DZH_zhanri\" SET naimenovanie = ?, opisanie = ? WHERE (kod_zhanra = ?)");
     }
 }

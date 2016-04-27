@@ -19,4 +19,8 @@ public class ArgTextField extends JTextField implements ArgComponent {
         return getText();
     }
 
+    @Override
+    public void setValue(String s) {
+        setText(s);
+    }
 }

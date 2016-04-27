@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="postgresql-9.4.12081">
+  <library name="postgresql-9.4.1208">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/postgresql-9.4.1208.jar!/" />
     </CLASSES>

@@ -158,7 +158,7 @@ public abstract class BasePanel extends JPanel {
         }
     }
 
-    protected void doInsert() {
+    private void doInsert() {
         try {
             List<String> args = new ArrayList<>();
             for (ArgComponent argComponent : jArgsComponentList) {
@@ -170,6 +170,7 @@ public abstract class BasePanel extends JPanel {
             }
             RadioFrame.sRadioFrame.updateAllPanels();
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(BasePanel.this, e.getMessage());
             e.printStackTrace();
         }
     }

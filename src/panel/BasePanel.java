@@ -18,6 +18,9 @@ import java.util.Objects;
 
 public abstract class BasePanel extends JPanel {
 
+    private static final String INSERT_TEXT = "Ins";
+    private static final String UPDATE_TEXT = "Upd";
+
     private BaseTableModel tableModel;
     private BaseDataBase dataBase;
 
@@ -60,6 +63,8 @@ public abstract class BasePanel extends JPanel {
         tableModel.fromQuery(dataBase.queryAll());
 
         jTable = new JTable(tableModel);
+        jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jTable.setCellSelectionEnabled(true);
 
         jNameSearchLabel = new JLabel(String.format("Фильтрация по %s:", getSearchLabelTextSuffix()));
         jNameSearchLabel.setBounds(280, 5, 400, 30);
@@ -81,7 +86,7 @@ public abstract class BasePanel extends JPanel {
         add(jClearButton);
 
         jScrollPane = new JScrollPane(jTable);
-        jScrollPane.setBounds(10, 70, 950, 460);
+        jScrollPane.setBounds(10, 70, 1150, 460);
         add(jScrollPane);
 
         jDeleteButton = new JButton(String.format("Удалить %s с id = ", getEntityName()));
@@ -109,10 +114,10 @@ public abstract class BasePanel extends JPanel {
         int argsCount = tableModel.getColumnCount() - 1;
         int widthOne = jScrollPane.getWidth() / (argsCount + 1);
 
-        jInsertUpdateButton = new JButton("I");
+        jInsertUpdateButton = new JButton(INSERT_TEXT);
         jInsertUpdateButton.setBounds(10, 580, (widthOne - 2) / 2, 30);
         jInsertUpdateButton.addActionListener(ev -> {
-            if (Objects.equals(jInsertUpdateButton.getText(), "I")) {
+            if (Objects.equals(jInsertUpdateButton.getText(), INSERT_TEXT)) {
                 doInsert();
             } else {
                 doUpdate();
@@ -129,16 +134,16 @@ public abstract class BasePanel extends JPanel {
                     int id = Integer.parseInt(jIdTextField.getText());
                     List<String> argsForRecordById = getFieldsForRecordById(id);
                     if (argsForRecordById == null) {
-                        jInsertUpdateButton.setText("I");
+                        jInsertUpdateButton.setText(INSERT_TEXT);
                         clearArgsFields();
                         return;
                     }
                     for (int i = 0; i < argsForRecordById.size() - 1; i++) {
                         jArgsComponentList.get(i).setValue(argsForRecordById.get(i + 1));
                     }
-                    jInsertUpdateButton.setText("U");
+                    jInsertUpdateButton.setText(UPDATE_TEXT);
                 } catch (NumberFormatException e1) {
-                    jInsertUpdateButton.setText("I");
+                    jInsertUpdateButton.setText(INSERT_TEXT);
                     clearArgsFields();
                 }
             }
@@ -224,7 +229,7 @@ public abstract class BasePanel extends JPanel {
             clearArgsFields();
             RadioFrame.sRadioFrame.updateAllPanels();
             jIdTextField.setText("");
-            jInsertUpdateButton.setText("I");
+            jInsertUpdateButton.setText(INSERT_TEXT);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(BasePanel.this, e.getMessage());
             e.printStackTrace();

@@ -4,11 +4,14 @@ import arg_component.ResultSetComboBox;
 import arg_component.StringComboBox;
 import data_base.BaseDataBase;
 import data_base.ZapisDataBase;
+import radioapp.RadioFrame;
 import table_model.BaseTableModel;
 import table_model.ZapisTableModel;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -52,6 +55,20 @@ public class ZapisPanel extends BasePanel {
                     stringList.add(String.valueOf(i));
                 }
                 return stringList;
+            }
+        });
+
+        getTable().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (getTable().getSelectedColumn() == 2) {
+                    int row = e.getY() / getTable().getRowHeight();
+                    RadioFrame.sRadioFrame.showAndSelectIspolnitel(String.valueOf(getTableModel().getValueAt(row, 2)));
+                }
+                if (getTable().getSelectedColumn() == 5) {
+                    int row = e.getY() / getTable().getRowHeight();
+                    RadioFrame.sRadioFrame.showAndSelectZharn(String.valueOf(getTableModel().getValueAt(row, 5)));
+                }
             }
         });
     }

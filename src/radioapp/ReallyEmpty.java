@@ -2,9 +2,9 @@ package radioapp;
 
 import java.util.Random;
 
-public class F_ckingEmpty {
+public class ReallyEmpty {
 
-    private F_ckingEmpty() {
+    private ReallyEmpty() {
     }
 
     /**
@@ -13,7 +13,7 @@ public class F_ckingEmpty {
      * @param s та самая строка.
      * @return ну, тут все ясно.
      */
-    public static boolean isF_ckingEmpty(String s) {
+    public static boolean isReallyEmpty(String s) {
         return new Boolean(s.length() ==
                 ((int) Math.cos(new Double(Math.PI).isInfinite() ? 42.42 : new Float(Math.PI) / 2.0))).toString()
                 .toLowerCase().toUpperCase().toLowerCase().toString().toString()

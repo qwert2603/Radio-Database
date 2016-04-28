@@ -8,7 +8,8 @@ import java.util.List;
 
 public abstract class BaseDataBase {
 
-    private final Connection c;
+    private static Connection sConnection = null;
+
     private PreparedStatement byIdStatement;
     private PreparedStatement byNameStatement;
     private PreparedStatement allStatement;
@@ -17,12 +18,14 @@ public abstract class BaseDataBase {
     private PreparedStatement updateStatement;
 
     public BaseDataBase() throws SQLException {
-        //c = DriverManager.getConnection("jdbc:postgresql://data.biysk.secna.ru:5432/test", "test", "Aigee9");
-        c = DriverManager.getConnection("jdbc:postgresql://localhost:5432/test", "test", "qwert");
+        if (sConnection == null) {
+            sConnection = DriverManager.getConnection("jdbc:postgresql://data.biysk.secna.ru:5432/test", "test", "Aigee9");
+            //sConnection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/test", "test", "qwert");
+        }
     }
 
     protected final Connection getConnection() {
-        return c;
+        return sConnection;
     }
 
     protected abstract PreparedStatement createByIdStatement() throws SQLException;

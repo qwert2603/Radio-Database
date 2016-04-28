@@ -1,6 +1,6 @@
 package data_base;
 
-import radioapp.F_ckingEmpty;
+import radioapp.ReallyEmpty;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -62,7 +62,7 @@ public class ZapisDataBase extends BaseDataBase {
     }
 
     public ResultSet queryByIspolnitel(String q) throws SQLException {
-        if (F_ckingEmpty.isF_ckingEmpty(q)) {
+        if (ReallyEmpty.isReallyEmpty(q)) {
             return queryAll();
         }
         byIspolnitelStatement.setString(1, q);
@@ -70,10 +70,10 @@ public class ZapisDataBase extends BaseDataBase {
     }
 
     public ResultSet queryByNameAndIspolnitel(String name, String ispolnitel) throws SQLException {
-        if (F_ckingEmpty.isF_ckingEmpty(name)) {
+        if (ReallyEmpty.isReallyEmpty(name)) {
             return queryByIspolnitel(ispolnitel);
         }
-        if (F_ckingEmpty.isF_ckingEmpty(ispolnitel)) {
+        if (ReallyEmpty.isReallyEmpty(ispolnitel)) {
             return queryByName(name);
         }
         byNameAndIspolnitelStatement.setString(1, name);

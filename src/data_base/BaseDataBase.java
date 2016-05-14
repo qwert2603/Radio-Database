@@ -19,8 +19,8 @@ public abstract class BaseDataBase {
 
     public BaseDataBase() throws SQLException {
         if (sConnection == null) {
-            sConnection = DriverManager.getConnection("jdbc:postgresql://data.biysk.secna.ru:5432/test", "test", "Aigee9");
-            //sConnection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/test", "test", "qwert");
+            //sConnection = DriverManager.getConnection("jdbc:postgresql://data.biysk.secna.ru:5432/test", "test", "Aigee9");
+            sConnection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/test", "test", "1234");
         }
     }
 
